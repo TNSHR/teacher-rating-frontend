@@ -5,6 +5,7 @@ import API from "../api";
 import AllTeachersRatings from "./AllTeachersRatings";
 import "../styles/AdminPanel.css";
 
+
 const AdminPanel = ({ setUser }) => {
   const navigate = useNavigate();
   const [allUsers, setAllUsers] = React.useState([]);
@@ -32,6 +33,7 @@ const AdminPanel = ({ setUser }) => {
       console.error(err);
     }
   };
+  
 const fetchAllUsers = async () => {
   try {
     const token = localStorage.getItem("token"); // get JWT from localStorage
