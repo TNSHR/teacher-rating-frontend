@@ -1,0 +1,136 @@
+.rate-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 25px;
+  background: linear-gradient(145deg, #f3f6ff, #ffffff);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  font-family: "Poppins", sans-serif;
+  color: #333;
+}
+
+.rate-container h2 {
+  text-align: center;
+  color: #1f3c88;
+  margin-bottom: 25px;
+}
+
+.select-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.select-group label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.select-group select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.select-group select:hover {
+  border-color: #1f3c88;
+}
+
+.teachers-list {
+  margin-top: 30px;
+}
+
+.teacher-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease-in-out;
+}
+
+.teacher-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.teacher-info {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.star-rating {
+  font-size: 22px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.star {
+  transition: color 0.2s ease-in-out;
+}
+
+.star:hover {
+  color: gold;
+}
+
+.star.filled {
+  color: gold;
+}
+
+.teacher-card.disabled {
+  opacity: 0.7;
+  pointer-events: none;
+  background: #f7f7f7;
+}
+
+.already-rated {
+  color: #1f3c88;
+  font-weight: 500;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.submit-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #1f3c88;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #162a61;
+}
+
+.message {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 500;
+}
+.unique-code-input {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  width: 200px;
+  margin-right: 10px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.unique-code-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,0.3);
+}
+

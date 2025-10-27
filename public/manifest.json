@@ -1,0 +1,20 @@
+{
+  "short_name": "TeacherRating",
+  "name": "Teacher Rating System",
+  "icons": [
+    {
+      "src": "app-icon.jpg",
+      "sizes": "225x225",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "app-icon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#6A0DAD",
+  "background_color": "#ffffff"
+}
