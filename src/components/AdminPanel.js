@@ -79,7 +79,7 @@ const fetchAllUsers = async () => {
   const addRow = (type) => {
     const newRow =
       type === "teachers"
-        ? { _id: `t-${Date.now()}`, name: "", subject: "" }
+         ? { _id: `t-${Date.now()}`, name: "", subject: "", grade: "" }
         : { _id: `s-${Date.now()}`, name: "", grade: "" };
 
     if (type === "teachers") setTeachers([...teachers, newRow]);
@@ -114,12 +114,14 @@ const fetchAllUsers = async () => {
             const res = await API.post("/teachers", {
               name: t.name,
               subject: t.subject,
+              grade: t.grade,
             });
             t._id = res.data._id;
           } else {
             await API.put(`/teachers/${t._id}`, {
               name: t.name,
               subject: t.subject,
+              grade: t.grade,
             });
           }
         }
@@ -321,6 +323,14 @@ const handleDownloadBackup = async () => {
                     placeholder="Enter subject"
                   />
                 </label>
+                 <label>
+    Grade:
+   <input
+       value={t.grade}
+      onChange={(e) => handleChange("teachers", t._id, "grade", e.target.value)}
+      placeholder="Enter grade taught"
+    />
+ </label>
                 <button className="remove-btn" onClick={() => removeRow("teachers", t._id)}>
                   ✖
                 </button>

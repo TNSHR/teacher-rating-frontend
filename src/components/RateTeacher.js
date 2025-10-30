@@ -23,8 +23,8 @@ const RateTeacher = () => {
         setVerifiedStudent(student);
 
         // Fetch teachers
-        const tRes = await API.get("/teachers");
-        setTeachers(tRes.data);
+        const tRes = await API.get(`/teachers/by-student-code/${uniqueCode}`);
+setTeachers(tRes.data.teachers);
 
         // Fetch today’s ratings by this student
         const rRes = await API.get(`/ratings/today/${student._id}`);
