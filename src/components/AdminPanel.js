@@ -88,19 +88,25 @@ const fetchAllUsers = async () => {
 
  const removeRow = async (type, id) => {
   try {
-    await fetch(`API/api/${type}/${id}`, {
-      method: "DELETE",
+    // call your backend via the API axios instance (base already configured)
+    await API.delete(`/${type}/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
 
-    if (type === "teachers") setTeachers(teachers.filter((t) => t._id !== id));
-    else setStudents(students.filter((s) => s._id !== id));
+    // update local state after successful deletion
+    if (type === "teachers") {
+      setTeachers((prev) => prev.filter((t) => t._id !== id));
+    } else {
+      setStudents((prev) => prev.filter((s) => s._id !== id));
+    }
   } catch (error) {
     console.error("Error deleting:", error);
+    setMessage("❌ Failed to delete. Try again.");
   }
 };
+
 
 
   // Handle input change
