@@ -88,7 +88,7 @@ const fetchAllUsers = async () => {
 
  const removeRow = async (type, id) => {
   try {
-    await fetch(`http://localhost:5000/api/${type}/${id}`, {
+    await fetch(`API/api/${type}/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
