@@ -86,11 +86,22 @@ const fetchAllUsers = async () => {
     else setStudents([...students, newRow]);
   };
 
-  // Remove row
-  const removeRow = (type, id) => {
+ const removeRow = async (type, id) => {
+  try {
+    await fetch(`http://localhost:5000/api/${type}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
     if (type === "teachers") setTeachers(teachers.filter((t) => t._id !== id));
     else setStudents(students.filter((s) => s._id !== id));
-  };
+  } catch (error) {
+    console.error("Error deleting:", error);
+  }
+};
+
 
   // Handle input change
   const handleChange = (type, id, field, value) => {
