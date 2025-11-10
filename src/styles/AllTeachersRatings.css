@@ -93,3 +93,86 @@ h2 {
   font-size: 1.1rem;
   margin-top: 40px;
 }
+/* ---------- EXPANDED VIEW STYLING ---------- */
+.ratings-list {
+  background: #f9fafc;
+  border-top: 2px solid #e0e6f0;
+  margin-top: 10px;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Subject & grade block */
+.subject-block {
+  background: #ffffff;
+  border: 1px solid #e6e9ef;
+  border-radius: 10px;
+  padding: 10px 15px;
+  margin: 10px 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.subject-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Subject title + rating */
+.subject-block p {
+  margin: 0;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Student rating list */
+.subject-block ul {
+  list-style: none;
+  margin-top: 8px;
+  padding-left: 0;
+}
+
+.subject-block li {
+  background: #f6f8fb;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 5px 0;
+  font-size: 14px;
+  color: #444;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subject-block li span {
+  color: #0077cc;
+  font-weight: 500;
+}
+
+/* Title in expanded view */
+.ratings-list h4 {
+  margin-bottom: 10px;
+  color: #1d3557;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 5px;
+}
+
+/* Smooth fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

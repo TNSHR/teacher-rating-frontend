@@ -282,4 +282,267 @@
 .remove-btn:hover {
   background: #ff7875;
 }
+/* --- Better styling for teacher subject-grade input cards --- */
+.teacher-row {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.teacher-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.teacher-row label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.subjects-list {
+  background: #f9fafc;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.subject-grade-pair {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.subject-grade-pair input {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.add-small-btn {
+  margin-top: 5px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-small-btn:hover {
+  background: #1565c0;
+}
+
+.remove-btn.small {
+  background: #ff5252;
+  border: none;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.remove-btn.small:hover {
+  background: #d32f2f;
+}
+/* --- Student Card Styling (Non-breaking Enhancement) --- */
+.student-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.student-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.student-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+.student-card h4 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.student-info {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.student-info strong {
+  color: #1976d2;
+}
+
+.student-card .remove-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.student-card .remove-btn:hover {
+  background-color: #d32f2f;
+}
+/* 🎓 Student Section Styling (only applies within .student-section) */
+.student-section .student-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  padding: 20px;
+}
+
+.student-section .student-card {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 16px 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.student-section .student-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+.student-section .student-card h4 {
+  color: #1e293b;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.student-section .student-info {
+  color: #475569;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.student-section .student-info strong {
+  color: #1e40af;
+}
+
+.student-section .remove-btn {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.student-section .remove-btn:hover {
+  background: linear-gradient(90deg, #f87171, #dc2626);
+  transform: scale(1.03);
+}
+/* ✨ Style improvements only for the Students section */
+.card h3:contains("Students"),
+.card h3:has(+ .button-group) {
+  text-align: center;
+  color: #1e3a8a;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.card .row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card .row:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* Input fields styling */
+.card .row input {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 10px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.card .row input:focus {
+  border-color: #2563eb;
+}
+
+/* Label spacing */
+.card .row label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+/* Remove button styling */
+.card .row .remove-btn {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.card .row .remove-btn:hover {
+  background-color: #ef4444;
+}
+
+/* 🎓 Separate cards by grade automatically using nth-child for slight color variation */
+.card.students-section .row:nth-child(odd) {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+}
+
+.card.students-section .row:nth-child(even) {
+  background: linear-gradient(135deg, #faf5ff, #ede9fe);
+}
+
+
+
+
+
 

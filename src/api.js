@@ -3,6 +3,7 @@ import axios from "axios";
 const API = axios.create({
   baseURL: "https://teacher-rating-backend.onrender.com", // Replace with Render/Netlify URL when deployed
 });
+//https://teacher-rating-backend.onrender.com
 
 // Attach token automatically
 API.interceptors.request.use((req) => {
