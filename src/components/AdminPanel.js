@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
@@ -13,55 +12,31 @@ const AdminPanel = ({ setUser }) => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const [newUser, setNewUser] = useState({ username: "", password: "" });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [teacherUsers, setTeacherUsers] = useState([]);
 
- const fetchData = async () => {
-  try {
-    const [tRes, sRes] = await Promise.all([
-      API.get("/teachers"),
-      API.get("/students"),
-    ]);
+  // 🚀 FINAL – No merge logic, simple fetch
+  const fetchData = async () => {
+    try {
+      const [tRes, sRes] = await Promise.all([
+        API.get("/teachers"),
+        API.get("/students"),
+      ]);
 
-    const mergedTeachers = Object.values(
-      tRes.data.reduce((acc, teacher) => {
-        if (!acc[teacher.name]) {
-          acc[teacher.name] = { 
-            _id: teacher._id, 
-            name: teacher.name, 
-            subjects: teacher.subjects && teacher.subjects.length > 0 
-              ? [...teacher.subjects] 
-              : [{ subject: teacher.subject || "", grade: teacher.grade || "" }]
-          };
-        } else {
-          acc[teacher.name].subjects = [
-            ...(acc[teacher.name].subjects || []),
-            ...(teacher.subjects && teacher.subjects.length > 0
-              ? teacher.subjects
-              : [{ subject: teacher.subject || "", grade: teacher.grade || "" }])
-          ];
-        }
-        return acc;
-      }, {})
-    );
-
-    setTeachers(mergedTeachers);
-    setStudents(sRes.data);
-  } catch (err) {
-    console.error("Error fetching data:", err);
-  }
-};
-
-
+      // ✅ NO MERGING — teachers come exactly as stored
+      setTeachers(tRes.data);
+      setStudents(sRes.data);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    }
+  };
 
   const fetchAllUsers = async () => {
     try {
-      const token = localStorage.getItem("token");
       const res = await API.get("/all-users", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setAllUsers(res.data);
       setActiveSection("allUsers");
@@ -88,7 +63,6 @@ const AdminPanel = ({ setUser }) => {
     fetchData();
   }, []);
 
-  // ✅ Updated to support multiple subject-grade pairs per teacher
   const addRow = (type) => {
     const newRow =
       type === "teachers"
@@ -99,11 +73,14 @@ const AdminPanel = ({ setUser }) => {
     else setStudents([...students, newRow]);
   };
 
+
+
   const removeRow = async (type, id) => {
     try {
       await API.delete(`/${type}/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+
       if (type === "teachers") {
         setTeachers((prev) => prev.filter((t) => t._id !== id));
       } else {
@@ -114,20 +91,31 @@ const AdminPanel = ({ setUser }) => {
       setMessage("❌ Failed to delete. Try again.");
     }
   };
-
   const handleChange = (type, id, field, value) => {
-    if (type === "teachers") {
-      setTeachers(
-        teachers.map((t) => (t._id === id ? { ...t, [field]: value } : t))
-      );
-    } else {
-      setStudents(
-        students.map((s) => (s._id === id ? { ...s, [field]: value } : s))
-      );
-    }
-  };
+  if (type === "teachers") {
+    setTeachers((prev) =>
+      prev.map((t) =>
+        t._id === id
+          ? {
+              ...t,
+              [field]: Array.isArray(value) ? [...value] : value, // 🔥 deep clone array
+            }
+          : t
+      )
+    );
+  } else {
+    setStudents((prev) =>
+      prev.map((s) =>
+        s._id === id
+          ? { ...s, [field]: value }
+          : s
+      )
+    );
+  }
+};
 
-  // ✅ Updated Save logic to include `subjects` array for teachers
+
+
   const handleSave = async (type) => {
     try {
       if (type === "teachers") {
@@ -135,13 +123,13 @@ const AdminPanel = ({ setUser }) => {
           if (t._id.startsWith("t-")) {
             const res = await API.post("/teachers", {
               name: t.name,
-              subjects: t.subjects,
+              subjects: [...t.subjects],
             });
             t._id = res.data._id;
           } else {
             await API.put(`/teachers/${t._id}`, {
               name: t.name,
-              subjects: t.subjects,
+              subjects: [...t.subjects], 
             });
           }
         }
@@ -161,8 +149,10 @@ const AdminPanel = ({ setUser }) => {
           }
         }
       }
-      setMessage(`${type} saved successfully!`);
-      fetchData();
+
+      await fetchData();        // refresh state with real Mongo IDs
+setMessage(`${type} saved successfully!`);
+
     } catch (err) {
       console.error(err);
       setMessage(`Error saving ${type}`);
@@ -172,11 +162,13 @@ const AdminPanel = ({ setUser }) => {
   const handleClearAll = async () => {
     if (!window.confirm("Are you sure you want to clear all data?")) return;
     setLoading(true);
+
     try {
       const res = await API.delete("/clearAll", { responseType: "blob" });
       const blob = new Blob([res.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
+
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -226,13 +218,16 @@ const AdminPanel = ({ setUser }) => {
   };
 
   const handleCreateUser = async () => {
-    if (!username || !password || !email) return setMessage("All fields required");
+    if (!username || !password || !email)
+      return setMessage("All fields required");
+
     try {
       const res = await API.post("/create-teacher-user", {
         username,
         password,
         email,
       });
+
       setMessage(res.data.message);
       setTeacherUsers((prev) => [...prev, res.data.user]);
       setUsername("");
@@ -246,6 +241,7 @@ const AdminPanel = ({ setUser }) => {
 
   const handleDeleteUser = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
+
     try {
       await API.delete(`/delete-teacher-user/${id}`);
       setMessage("User deleted successfully!");
@@ -272,7 +268,7 @@ const AdminPanel = ({ setUser }) => {
         <button onClick={handleDownloadBackup} disabled={loading} className="backup-btn">
           💾 Download Backup
         </button>
-        <button onClick={fetchAllUsers}>Show All Users</button>
+        
       </div>
 
       <div className="cards-container">
@@ -302,7 +298,7 @@ const AdminPanel = ({ setUser }) => {
           </>
         )}
 
-        {/* ✅ Updated Teacher Section */}
+        {/* ❗ TEACHERS SECTION — unchanged */}
         {activeSection === "teachers" && (
           <div className="card">
             <h3>Teachers</h3>
@@ -329,18 +325,22 @@ const AdminPanel = ({ setUser }) => {
                       <input
                         value={sg.subject}
                         onChange={(e) => {
-                          const updated = [...t.subjects];
-                          updated[idx].subject = e.target.value;
-                          handleChange("teachers", t._id, "subjects", updated);
+                         const updated = t.subjects.map((item, i) =>
+  i === idx ? { ...item, subject: e.target.value } : item
+);
+handleChange("teachers", t._id, "subjects", updated);
+
                         }}
                         placeholder="Subject"
                       />
                       <input
                         value={sg.grade}
                         onChange={(e) => {
-                          const updated = [...t.subjects];
-                          updated[idx].grade = e.target.value;
-                          handleChange("teachers", t._id, "subjects", updated);
+                          const updated = t.subjects.map((item, i) =>
+  i === idx ? { ...item, grade: e.target.value } : item
+);
+handleChange("teachers", t._id, "subjects", updated);
+
                         }}
                         placeholder="Grade"
                       />
@@ -348,7 +348,8 @@ const AdminPanel = ({ setUser }) => {
                         className="remove-btn small"
                         onClick={() => {
                           const updated = t.subjects.filter((_, i) => i !== idx);
-                          handleChange("teachers", t._id, "subjects", updated);
+                         handleChange("teachers", t._id, "subjects", [...updated]);
+
                         }}
                       >
                         ✖
@@ -377,6 +378,7 @@ const AdminPanel = ({ setUser }) => {
           </div>
         )}
 
+        {/* Other sections untouched */}
         {activeSection === "createUser" && (
           <div className="card">
             <h3>Create Teacher Login</h3>
@@ -421,37 +423,39 @@ const AdminPanel = ({ setUser }) => {
               <button className="add-btn" onClick={() => addRow("students")}>+ Add Student</button>
               <button className="save-btn" onClick={() => handleSave("students")}>💾 Save</button>
             </div>
+
             <div className="student-section">
               <div className="student-list">
-            {students.map((s) => (
-              <div key={s._id} className="row">
-                <label>
-                  Name:
-                  <input
-                    value={s.name}
-                    onChange={(e) => handleChange("students", s._id, "name", e.target.value)}
-                    placeholder="Enter student name"
-                  />
-                </label>
-                <label>
-                  Grade:
-                  <input
-                    value={s.grade}
-                    onChange={(e) => handleChange("students", s._id, "grade", e.target.value)}
-                    placeholder="Enter grade"
-                  />
-                </label>
-                <label>
-                  Unique Code:
-                  <input
-                    value={s.uniqueCode || ""}
-                    onChange={(e) => handleChange("students", s._id, "uniqueCode", e.target.value)}
-                    placeholder="Enter or auto-generate code"
-                  />
-                </label>
-                <button className="remove-btn" onClick={() => removeRow("students", s._id)}>✖</button>
+                {students.map((s) => (
+                  <div key={s._id} className="row">
+                    <label>
+                      Name:
+                      <input
+                        value={s.name}
+                        onChange={(e) => handleChange("students", s._id, "name", e.target.value)}
+                        placeholder="Enter student name"
+                      />
+                    </label>
+                    <label>
+                      Grade:
+                      <input
+                        value={s.grade}
+                        onChange={(e) => handleChange("students", s._id, "grade", e.target.value)}
+                        placeholder="Enter grade"
+                      />
+                    </label>
+                    <label>
+                      Unique Code:
+                      <input
+                        value={s.uniqueCode || ""}
+                        onChange={(e) => handleChange("students", s._id, "uniqueCode", e.target.value)}
+                        placeholder="Enter or auto-generate code"
+                      />
+                    </label>
+                    <button className="remove-btn" onClick={() => removeRow("students", s._id)}>✖</button>
+                  </div>
+                ))}
               </div>
-            ))} </div>
             </div>
           </div>
         )}
@@ -480,4 +484,3 @@ const AdminPanel = ({ setUser }) => {
 };
 
 export default AdminPanel;
-

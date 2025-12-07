@@ -17,36 +17,68 @@ const Login = ({ setUser }) => {
 
   // ✅ LOGIN FUNCTION
   const handleLogin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!email || !password) {
-      setMessage("Please enter both email and password.");
+  if (!email || !password) {
+    setMessage("Please enter both email and password.");
+    return;
+  }
+
+  try {
+    console.log("Sending login request...");
+    
+    const res = await API.post("/login", {
+      email: email.trim().toLowerCase(),
+      password,
+    });
+
+    console.log("Login response:", res.data);
+    
+    const { token, isAdmin } = res.data;
+
+    if (!token) {
+      console.error("No token received from server");
+      setMessage("Login failed: No authentication token received");
       return;
     }
 
-    try {
-      const res = await API.post("/login", {
-        email: email.trim().toLowerCase(),
-        password,
-      });
+    // ✅ Save token & user info
+    localStorage.setItem("token", token);
+    localStorage.setItem("isAdmin", isAdmin);
+    localStorage.setItem("userEmail", email.trim().toLowerCase());
+    
+    // ✅ Update user state
+    setUser({ 
+      email: email.trim().toLowerCase(), 
+      token, 
+      isAdmin 
+    });
 
-      const { token, isAdmin } = res.data;
-
-      if (!token) throw new Error("Token missing from response");
-
-      // ✅ Save token & set user state
-      localStorage.setItem("token", token);
-      setUser({ email: email.trim().toLowerCase(), token, isAdmin });
-
-      // ✅ Navigate based on role
-      navigate(isAdmin ? "/admin" : "/rate-teacher");
-    } catch (err) {
-      console.error("Login frontend error:", err);
-      setMessage(
-        err.response?.data?.message || "Invalid credentials. Please try again."
-      );
+    // ✅ Navigate
+    navigate(isAdmin ? "/admin" : "/dashboard"); // Adjust route as needed
+    
+  } catch (err) {
+    console.error("Login frontend error:", {
+      message: err.message,
+      response: err.response?.data,
+      status: err.response?.status,
+      config: err.config // Shows URL being called
+    });
+    
+    // More specific error messages
+    if (err.response) {
+      // Server responded with error status
+      setMessage(err.response.data.message || `Error ${err.response.status}: Login failed`);
+    } else if (err.request) {
+      // Request was made but no response
+      setMessage("No response from server. Check if backend is running.");
+    } else {
+      // Something else went wrong
+      setMessage("Login failed. Please check your connection.");
     }
-  };
+  }
+};
+ 
 
   // ✅ SEND OTP (Forgot Password)
   const handleForgotPassword = async () => {

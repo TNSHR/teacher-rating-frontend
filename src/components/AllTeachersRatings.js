@@ -101,40 +101,42 @@ const AllTeachersRatings = () => {
               </div>
 
               {/* 🔹 Expanded view - show subject/grade-wise + student details */}
-              {expanded === teacherName && (
-                <div className="ratings-list">
-                  <h4>📘 Subject & Grade-wise Ratings:</h4>
-                  {subjects.map((s, i) => (
-                    <div key={i} className="subject-block">
-                      <p>
-                        <strong>
-                          {s.subject || "Unknown"}{" "}
-                          (Grade{" "}
-                          {s.grade ||
-                            s.teacherGrade ||
-                            s.classGrade ||
-                            s.gradeLevel ||
-                            "N/A"}
-                          )
-                        </strong>{" "}
-                        — ⭐ {s.average?.toFixed(1) || 0}
-                      </p>
+            {expanded === teacherName && (
+  <div className="ratings-list">
+    <h4>📘 Subject & Grade-wise Ratings:</h4>
 
-                      {/* 🔹 Show all student ratings for this subject */}
-                      {Array.isArray(s.ratings) && s.ratings.length > 0 && (
-                        <ul>
-                          {s.ratings.map((r, j) => (
-                            <li key={j}>
-                              👤 {r.studentName} (Grade {r.grade || "?"}) — ⭐{" "}
-                              {r.rating} — 📅 {r.date}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+    {subjects.map((t, i) =>
+      t.subjectWise?.map((sw, j) => {
+        const gradeStudents = t.ratings.filter(
+          (r) => String(r.grade) === String(sw.grade)
+        );
+
+        return (
+          <div key={`${i}-${j}`} className="subject-block">
+            <p>
+              <strong>
+                {sw.subject} (Grade {sw.grade})
+              </strong>{" "}
+              — ⭐ {sw.average.toFixed(1)}
+            </p>
+
+            {gradeStudents.length > 0 && (
+              <ul>
+                {gradeStudents.map((r, idx) => (
+                  <li key={idx}>
+                    👤 {r.studentName} (Grade {r.grade}) — ⭐ {r.rating} — 📅{" "}
+                    {r.date}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
+      })
+    )}
+  </div>
+)}
+
             </div>
           );
         })}
