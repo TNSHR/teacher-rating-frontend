@@ -7,7 +7,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <h2 style={{color: "#CCFF66 "}}>Welcome to Students Feedback portal</h2>
+      <h2 style={{color: "#CCFF66 "}}>Welcome to cheer leader happy report</h2>
       <div className="card-grid">
         <div className="home-card" onClick={() => navigate("/login")}>
           <h3>Login</h3>
