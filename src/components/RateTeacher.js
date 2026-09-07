@@ -85,7 +85,7 @@ const RateTeacher = () => {
 
   return (
     <div className="rate-container">
-      <h2>⭐ Rate Your Mentors</h2>
+      <h2>⭐ Learner Happiness Quotient</h2>
 
       {/* Enter Unique Code */}
       <div className="select-group">
